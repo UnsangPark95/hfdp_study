@@ -166,9 +166,11 @@ compose(f, g, h) = (...args) => f(g(h(...args)))
 
 - middleware
 ```javascript
+// 3중 중첩 함수
 function middleware({getState, dispatch}}) {
   return function wrapDispatch(next) {
     return function handleAction(action) {
+      // do something
       return next(action);
     }
   }
