@@ -167,6 +167,7 @@ compose(f, g, h) = (...args) => f(g(h(...args)))
 - middleware
 ```javascript
 // 3중 중첩 함수
+// 기본 디스패치 함수(baseDispatch)를 래핑
 function middleware({getState, dispatch}}) {
   return function wrapDispatch(next) {
     return function handleAction(action) {
