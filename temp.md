@@ -72,8 +72,9 @@ store.dispatch({ type: 'DECREMENT' }) // 1
 getState() : 현재 스토어에 있는 상태를 반환<br/>
 subscribe(listener) : 상태 변경시 호출할 함수를 등록<br/>
 dispatch(action) : 스토어에 등록한 리듀서에 액션 객체를 전달<br/>
-replaceReducer(reducer) : 리듀서 변경<br/>
+replaceReducer(reducer) : 리듀서 변경<br/><br/>
 
+- createStore
 ```javascript
 export default function createStore(reducer, initialState, enhancer) {
   var currentReducer = reducer
@@ -160,7 +161,8 @@ const compose = (...functions) => (initialVal)
 	=> functions.reduceRight((val, fn) => fn(val), initialVal);
 compose(f, g, h) = (...args) => f(g(h(...args)))
 ```
-
+<br/>
+- middleware
 ```javascript
 function middleware({getState, dispatch}}) {
   return function wrapDispatch(next) {
@@ -176,18 +178,32 @@ const anotherExampleMiddleware = ({getState, dispatch}) => next => action => {
   return next(action)
 }
 ```
-
+<br/>
+- applyMiddleware
 ```javascript
+
+// createStore 자체를 감싸는 고차 함수
 export default function applyMiddleware(...middlewares) {
   return (createStore) => (reducer, initialState, enhancer) => {
     var store = createStore(reducer, initialState, enhancer)
     var dispatch = store.dispatch
     var chain = []
 
+    // 미들웨어들에게 인자로 전달되는 객체
+    // 비동기 작업을 위해 이전 미들웨어 체인으로 돌아가야할 케이스가 있음. 클로저 변수로 전체 미들웨어가 연결된 dispatch가 필요하다.
     var middlewareAPI = {
       getState: store.getState,
       dispatch: (action) => dispatch(action)
     }
+    
+    /*
+    이전 미들웨어 체인을 참조 할 수 없음
+    const middlewareAPI = {
+        getState: store.getState,
+        dispatch
+    }
+    */
+    
     chain = middlewares.map(middleware => middleware(middlewareAPI))
     dispatch = compose(...chain)(store.dispatch)
 
@@ -202,8 +218,11 @@ export default function applyMiddleware(...middlewares) {
 <br/><br/><br/>
 
 ## reducer
-dispatch로부터 액션과 상태를 전달받아서 새로운 상태를 반환한다.
+- 이전 상태와 액션을 받아 새로운 상태를 반환하는 순수함수로 정의
+- 복잡한 애플리케이션의 모든 상태를 전부 하나의 리듀서로 관리하기는 어려움
+- 작은 단위의 리듀서를 만들고 마지막에 combineReducers API를 통해 리듀서를 조합
 
+- combineReducers
 ```javascript
 export default function combineReducers(reducers) {
   var reducerKeys = Object.keys(reducers)
@@ -247,6 +266,7 @@ export default function combineReducers(reducers) {
         throw new Error(errorMessage)
       }
       nextState[key] = nextStateForKey
+      // 상태 변화가 있는 경우에만 새로운 참조를 가진 객체를 반환
       hasChanged = hasChanged || nextStateForKey !== previousStateForKey
     }
     return hasChanged ? nextState : state
