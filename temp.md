@@ -211,9 +211,13 @@ export default function applyMiddleware(...middlewares) {
     }
     */
     
+    // 미들웨어가 반환하는 체인 함수(wrapDispatch)
     chain = middlewares.map(middleware => middleware(middlewareAPI))
+    
+    // 체인 함수들을 결합해서 새로운 dispatch 함수
     dispatch = compose(...chain)(store.dispatch)
 
+    //  파라미터로 받았던 기존 스토어와 동일한 Store api와 새로 만들어진 dispatch 함수를 반환한다.
     return {
       ...store,
       dispatch
