@@ -161,7 +161,9 @@ const compose = (...functions) => (initialVal)
 	=> functions.reduceRight((val, fn) => fn(val), initialVal);
 compose(f, g, h) = (...args) => f(g(h(...args)))
 ```
+
 <br/>
+
 - middleware
 ```javascript
 function middleware({getState, dispatch}}) {
@@ -178,7 +180,9 @@ const anotherExampleMiddleware = ({getState, dispatch}) => next => action => {
   return next(action)
 }
 ```
+
 <br/>
+
 - applyMiddleware
 ```javascript
 
