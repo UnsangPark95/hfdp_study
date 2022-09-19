@@ -63,7 +63,6 @@ store.dispatch({ type: 'DECREMENT' }) // 1
 <br/>
 -> 리덕스의 상태는 하나의 스토어에서 관리되며 스토어를 통해 읽기만 할수 있고, 리듀서라는 순수 함수를 통해서만 상태를 변경할 수 있다.<br/>
 -> 전역 상태 관리와 디버깅이 편리해진다.<br/>
-currentState = reducer(prevState, action)
 
 <br/><br/><br/>
 
@@ -152,10 +151,10 @@ export default function createStore(reducer, initialState, enhancer) {
 <br/><br/><br/>
 
 ## middleware
-미들웨어를 통해 dispatch 과정에서 액션이 리듀서에 도달하기 전에 특정 작업을 미리 처리할 수 있다.<br/>
-액션 검증, 액션 필터링, api 연동, 비동기 처리 등을 처리<br/>
-특정 작업을 액션이랑 분리하기 때문에 복잡성, 중복 등 유지보수 측면에서 장점<br/>
-Compose
+- 미들웨어를 통해 dispatch 과정에서 액션이 리듀서에 도달하기 전에 특정 작업을 미리 처리할 수 있다.<br/>
+- 액션 검증, 액션 필터링, api 연동, 비동기 처리 등을 처리<br/>
+- 특정 작업을 액션이랑 분리하기 때문에 복잡성, 중복 등 유지보수 측면에서 장점<br/>
+- Compose
 ```javascript
 const compose = (...functions) => (initialVal) 
 	=> functions.reduceRight((val, fn) => fn(val), initialVal);
