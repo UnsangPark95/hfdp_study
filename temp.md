@@ -154,12 +154,12 @@ export default function createStore(reducer, initialState, enhancer) {
 ## middleware
 - 미들웨어를 통해 dispatch 과정에서 액션이 리듀서에 도달하기 전에 특정 작업을 미리 처리할 수 있다.<br/>
 - 액션 검증, 액션 필터링, api 연동, 비동기 처리 등을 처리<br/>
-- 특정 작업을 액션이랑 분리하기 때문에 복잡성, 중복 등 유지보수 측면에서 장점<br/>
+- 특정 작업을 액션이랑 분리하기 때문에 복잡성, 중복 등 유지보수 측면에서 장점<br/><br/>
 - Compose
 ```javascript
+compose(f, g, h) = (...args) => f(g(h(...args)))
 const compose = (...functions) => (initialVal) 
 	=> functions.reduceRight((val, fn) => fn(val), initialVal);
-compose(f, g, h) = (...args) => f(g(h(...args)))
 ```
 
 <br/>
